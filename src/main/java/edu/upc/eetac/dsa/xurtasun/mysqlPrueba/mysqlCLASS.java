@@ -14,7 +14,7 @@ public class mysqlCLASS {
 		    try {
 		      Class.forName("com.mysql.jdbc.Driver");
 		      // setup the connection with the DB.
-		      connect = DriverManager.getConnection("jdbc:mysql://localhost/urtasun","mysql","xavi");
+		      connect = DriverManager.getConnection("jdbc:mysql://localhost/urtasun?"+"user=root&password=xavi");
 
 		      // statements allow to issue SQL queries to the database
 		      statement = connect.createStatement();
@@ -34,16 +34,16 @@ public class mysqlCLASS {
 		      preparedStatement.setString(6, "TestComment");
 		      preparedStatement.executeUpdate();
 
-		      preparedStatement = connect.prepareStatement("SELECT myuser, webpage, datum, summary, COMMENTS from FEEDBACK.COMMENTS");
+		      preparedStatement = connect.prepareStatement("SELECT myuser, webpage, datum, summary, COMMENTS from urtasun.COMMENTS");
 		      resultSet = preparedStatement.executeQuery();
 		      writeResultSet(resultSet);
 
 		      // remove again the insert comment
-		      preparedStatement = connect.prepareStatement("delete from FEEDBACK.COMMENTS where myuser= ? ; ");
+		      preparedStatement = connect.prepareStatement("delete from urtasun.COMMENTS where myuser= ? ; ");
 		      preparedStatement.setString(1, "Test");
 		      preparedStatement.executeUpdate();
 		      
-		      resultSet = statement.executeQuery("select * from FEEDBACK.COMMENTS");
+		      resultSet = statement.executeQuery("select * from urtasun.COMMENTS");
 		      writeMetaData(resultSet);
 		      
 		    } catch (Exception e) {
@@ -80,12 +80,12 @@ public class mysqlCLASS {
 		  }
 
 		  // you need to close all three to make sure
-		  /*private void close() {
+		  private void close() {
 		    close(resultSet);
 		    close(statement);
 		    close(connect);
-		  }*/
-		  private void close(Closeable c) {
+		  }
+		  private void close(AutoCloseable c) {
 		    try {
 		      if (c != null) {
 		        c.close();
